@@ -23,7 +23,7 @@ def load_data(path="data/cora/", dataset="cora"):
     # build graph
     idx = np.array(idx_features_labels[:, 0], dtype=np.int32)
     idx_map = {j: i for i, j in enumerate(idx)}
-    edges_unordered = np.genfromtxt("{}{}.cites".format(path, dataset), dtype=np.int32)
+    edges_unordered = np.genfromtxt("{}{}.features".format(path, dataset), dtype=np.int32)
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())),
                      dtype=np.int32).reshape(edges_unordered.shape)
     adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
@@ -59,10 +59,13 @@ def sample_mask(idx, l):
     return np.array(mask, dtype=np.bool)
 
 
-def get_splits(y):
-    idx_train = range(140)
-    idx_val = range(200, 500)
-    idx_test = range(500, 1500)
+def get_splits(y, training_fraction, validation_fraction):
+    n1 = int(len(y) * training_fraction + 0.5)
+    n2 = n1 + int(len(y) * validation_fraction + 0.5)
+    idx_train = range(n1)
+    idx_val = range(n1, n2)
+    idx_test = range(n2, len(y))
+    print (len(idx_train), len(idx_val), len(idx_test))
     y_train = np.zeros(y.shape, dtype=np.int32)
     y_val = np.zeros(y.shape, dtype=np.int32)
     y_test = np.zeros(y.shape, dtype=np.int32)
