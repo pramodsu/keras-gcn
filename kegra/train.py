@@ -11,7 +11,7 @@ from kegra.utils import *
 import time
 
 # Define parameters
-DATASET = 'cora'
+DATASET = 'logdec' #'cora'
 FILTER = 'localpool'  # 'chebyshev'
 MAX_DEGREE = 2  # maximum polynomial degree
 SYM_NORM = True  # symmetric (True) vs. left-only (False) normalization
